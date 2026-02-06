@@ -64,15 +64,9 @@ public class TUI {
         screen.showMessage("Task started. Enjoy!");
     }
 
-    public void startNewTask() {
-
-        initializeTaskScreen();
-        screen.showMessage("Type 'save' to stop & save the task.");
-
+    public void startNewTask(){
+        screen.showMessage("Type 'save' to save the task.");
         startNewTaskTimer();
-
-        saveTask();
-
         System.out.println("Is this task part of a Git project and do you want to commit changes? (yes/no/some)");
         String gitInput = scanner.nextLine().trim();
 
@@ -116,11 +110,7 @@ public class TUI {
     }
 
 
-
-
-
     private void startNewTaskTimer() {
-
         initializeTaskScreen();
         screen.showMessage("Type 'save' to stop & save the task.");
 
