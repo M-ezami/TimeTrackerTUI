@@ -64,38 +64,41 @@ public class TUI {
         screen.showMessage("Task started. Enjoy!");
     }
 
-    public void startNewTask(){
+    public void startNewTask() {
         startNewTaskTimer();
-        System.out.println("Is this task part of a Git project and do you want to commit changes? (yes/no/some)");
-        String gitInput = scanner.nextLine().trim();
 
-        boolean isGitTask = false;
-
-        if (gitInput.equalsIgnoreCase("yes") || gitInput.equalsIgnoreCase("some")) {
-            isGitTask = true;
-            File repoDir = null;
-            while (repoDir == null){
-            System.out.println("Enrter the path to your Git repository:");
-            String repoInput = scanner.nextLine().trim();
-            File repoPath = new File(repoInput);
-
-            if (!repoPath.exists() || !new File(repoPath, ".git").exists()) {
-                System.out.println("Invalid Git repository path. Try again.");
-
+        String gitInput = null;
+        while (gitInput == null) {
+            System.out.println("Is this task part of a Git project and do you want to commit changes? (yes/no/some)");
+            String line = scanner.nextLine().trim();
+            if (line.equalsIgnoreCase("yes") || line.equalsIgnoreCase("no") || line.equalsIgnoreCase("some")) {
+                gitInput = line;
             } else {
-                try {
-                repoDir = repoPath;
-                    git.setRepoDir(repoDir);
-                } catch (IOException e) {
-                    System.out.println("Failed to open Git repository. Skipping Git commit.");
-                    e.printStackTrace();
-                    isGitTask = false;
-                }
-            }
+                System.out.println("Invalid input, please type yes, no, or some.");
             }
         }
 
-        if (isGitTask) {
+        if (gitInput.equalsIgnoreCase("yes") || gitInput.equalsIgnoreCase("some")) {
+            File repoDir = null;
+            while (repoDir == null) {
+                System.out.println("Enter the path to your Git repository:");
+                String repoInput = scanner.nextLine().trim();
+                File repoPath = new File(repoInput);
+
+                if (!repoPath.exists() || !new File(repoPath, ".git").exists()) {
+                    System.out.println("Invalid Git repository path. Try again.");
+                } else {
+                    try {
+                        repoDir = repoPath;
+                        git.setRepoDir(repoDir);
+                    } catch (IOException e) {
+                        System.out.println("Failed to open Git repository. Skipping Git commit.");
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+
             if (gitInput.equalsIgnoreCase("yes")) {
                 try {
                     git.commitChanges("Completed task: " + task.getTitle());
@@ -105,11 +108,11 @@ public class TUI {
                     e.printStackTrace();
                 }
             } else if (gitInput.equalsIgnoreCase("some")) {
-                // implemnt something here bruh wtffffff
                 System.out.println("Selective commit not implemented yet.");
             }
         }
     }
+
 
 
     private void startNewTaskTimer() {
