@@ -103,7 +103,7 @@ public class TUI {
                     e.printStackTrace();
                 }
             } else if (gitInput.equalsIgnoreCase("some")) {
-                // TODO: implement selective commit logic
+                // implemnt something here bruh wtffffff
                 System.out.println("Selective commit not implemented yet.");
             }
         }
