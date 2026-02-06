@@ -69,16 +69,16 @@ public class TUI {
 
         String gitInput = null;
         while (gitInput == null) {
-            System.out.println("Is this task part of a Git project and do you want to commit changes? (yes/no/some)");
+            System.out.println("Is this task part of a Git project and do you want to commit changes, s for some? (y/n/s)");
             String line = scanner.nextLine().trim();
-            if (line.equalsIgnoreCase("yes") || line.equalsIgnoreCase("no") || line.equalsIgnoreCase("some")) {
+            if (line.equalsIgnoreCase("y") || line.equalsIgnoreCase("n") || line.equalsIgnoreCase("s")) {
                 gitInput = line;
             } else {
                 System.out.println("Invalid input, please type yes, no, or some.");
             }
         }
 
-        if (gitInput.equalsIgnoreCase("yes") || gitInput.equalsIgnoreCase("some")) {
+        if (gitInput.equalsIgnoreCase("y") || gitInput.equalsIgnoreCase("s")) {
             File repoDir = null;
             while (repoDir == null) {
                 System.out.println("Enter the path to your Git repository:");
@@ -99,7 +99,7 @@ public class TUI {
             }
 
 
-            if (gitInput.equalsIgnoreCase("yes")) {
+            if (gitInput.equalsIgnoreCase("y")) {
                 try {
                     git.commitChanges("Completed task: " + task.getTitle());
                     System.out.println("All changes committed successfully!");
@@ -107,8 +107,8 @@ public class TUI {
                     System.out.println("Failed to commit changes.");
                     e.printStackTrace();
                 }
-            } else if (gitInput.equalsIgnoreCase("some")) {
-                System.out.println("Selective commit not implemented yet.");
+            } else if (gitInput.equalsIgnoreCase("s")) {
+                System.out.println("not implemented yet.");
             }
         }
     }
@@ -123,7 +123,7 @@ public class TUI {
 
         while (!stop) {
             System.out.print("\rCurrent time spent: " + time.getTimeSpendFormatted() + " (type 'save' to stop) ");
-            System.out.flush();
+
 
             try {
                 if (System.in.available() > 0) {

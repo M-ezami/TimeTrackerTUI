@@ -19,8 +19,6 @@ public class Csv {
 	
 	private final File file = new File("/home/mosa/Storage/projects/Timer/src/main/java/resources/tasks.csv");
 
-
-	
 	public void writeToCsv(Task task) {
 	    TaskRecord record = task.createRecord(createIndex());
 	    boolean isNew = !file.exists();
@@ -56,8 +54,6 @@ public class Csv {
 	    return counter +1 ;
 	}
 
-	
-	
 
 	public void printCsv() {
 	    final String RESET = "\033[0m";
@@ -76,7 +72,7 @@ public class Csv {
 	            for (int i = 0; i < fields.length; i++) {
 	            	
 	                String color = columnColors.getOrDefault(i, RESET);
-	                System.out.print(color + fields[i] + "	");
+	                System.out.print(color + fields[i]);
 	            }
 	            System.out.println(RESET); 
 	        }

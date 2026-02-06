@@ -21,6 +21,7 @@ public class Time {
         this.endTime = null;
         this.timeSpend = Duration.ZERO;
     }
+
     public void pause() {
     	
     }

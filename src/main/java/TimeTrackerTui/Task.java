@@ -1,8 +1,5 @@
 package TimeTrackerTui;
 
-
-
-
 public class Task {
 private Time time;
 private String title;
