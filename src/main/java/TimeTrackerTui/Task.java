@@ -14,7 +14,6 @@ public Task(String title, Time time) {
     
 }
 
-
 public void setTitle(String title) {
 	this.title = title;
 	}
@@ -23,6 +22,9 @@ public void setRating(int rating) {
 	this.focusRating = rating;
 }
 
+public String getTitle() {
+    return this.title;
+}
 
 public TaskRecord createRecord(int index) {
     return new TaskRecord(
