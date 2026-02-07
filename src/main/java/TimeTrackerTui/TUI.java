@@ -10,7 +10,7 @@ public class TUI {
     private boolean tuiRunning = true;
     private final Scanner scanner = new Scanner(System.in);
     private Task task;
-    private Time time;
+    private Timer timer;
     private final Csv csv = new Csv();
     private final Screen screen = new Screen();
     private final gitHelper git = new gitHelper();
@@ -58,7 +58,7 @@ public class TUI {
         task.setRating(scanner.nextInt());
         scanner.nextLine();
         csv.writeToCsv(task);
-        screen.showMessage("Task saved. Total time: " + time.getTimeSpendFormatted());
+        screen.showMessage("Task saved. Total time: " + timer.getTimeSpendFormatted());
     }
 
 
@@ -67,9 +67,9 @@ public class TUI {
         screen.showTaskPrompt();
         String title = scanner.nextLine();
 
-        time = new Time();
-        time.start();
-        task = new Task(title, time);
+        timer = new Timer();
+        timer.start();
+        task = new Task(title, timer);
         screen.showMessage("Task started. Enjoy!");
     }
 
@@ -87,26 +87,26 @@ public class TUI {
         boolean paused = false;
 
         while (!stop) {
-            System.out.print("\rCurrent time spent: " + time.getTimeSpendFormatted() +
+            System.out.print("\rCurrent time spent: " + timer.getTimeSpendFormatted() +
                     " (s = stop, p = pause, r = resume): ");
             try {
                 if (System.in.available() > 0) {
                     String input = scanner.nextLine().trim().toLowerCase();
                     switch (input) {
                         case "s":
-                            time.stop();
+                            timer.stop();
                             stop = true;
                             break;
                         case "p":
                             if (!paused) {
-                                time.pause();
+                                timer.pause();
                                 paused = true;
                                 System.out.println("\nPaused. Type 'r' to resume or 's' to save.");
                             }
                             break;
                         case "r":
                             if (paused) {
-                                time.resume();
+                                timer.resume();
                                 paused = false;
                             }
                             break;

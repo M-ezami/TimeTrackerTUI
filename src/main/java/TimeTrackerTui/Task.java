@@ -1,19 +1,15 @@
 package TimeTrackerTui;
 
 public class Task {
-private Time time;
-private String title;
+private final Timer timer;
+private final String title;
 private int focusRating;
 int index ;
-
-public Task(String title, Time time) {
+// create our own timer object maybe because timer is a neccesity for task tui doesnt need its own timer for any reason really
+public Task(String title, Timer timer) {
     this.title = title;
-    this.time = time;
+    this.timer = timer;
 }
-
-public void setTitle(String title) {
-	this.title = title;
-	}
 
 public void setRating(int rating) {
 	this.focusRating = rating;
@@ -27,9 +23,9 @@ public TaskRecord createRecord(int index) {
     return new TaskRecord(
     	this.index = index,
         this.title,
-        this.time.getStartTime(),
-        this.time.getEndTime(),
-        this.time.getTimeSpendFormatted(),
+        this.timer.getStartTime(),
+        this.timer.getEndTime(),
+        this.timer.getTimeSpendFormatted(),
         this.focusRating
     );
 

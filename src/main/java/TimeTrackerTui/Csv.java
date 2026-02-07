@@ -13,7 +13,7 @@ import java.util.Map;
 //2. A method for printing the csv to the console 
 //2.1 maps colors to indices
 //2.2 use those indices to print the colors.
-
+// do sth bout ptt
 
 public class Csv {
 	
@@ -34,11 +34,9 @@ public class Csv {
 	                 record.end().format(formatter) + "," +
 	                 record.duration() + "," +
 	                 record.focusRating() + "\n");
-
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-	    
 	}
 	
 	public int createIndex() {
@@ -53,7 +51,6 @@ public class Csv {
 	    }
 	    return counter +1 ;
 	}
-
 
 	public void printCsv() {
 	    final String RESET = "\033[0m";
@@ -80,7 +77,6 @@ public class Csv {
 	        System.out.println("Error reading file.");
 	    }
 	}
-	    
 	    
 	public void deleteRow(int index) {
 	    try {
