@@ -149,7 +149,7 @@ public class TUI {
                 checkRepoPath();
                 break;
             case "n":
-                System.out.println("Skipping Git commit.");
+                System.out.println("Skipping Git commits.");
                 break;
 
 
