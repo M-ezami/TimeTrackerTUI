@@ -1,5 +1,5 @@
 package TimeTrackerTui;
-import org.eclipse.jgit.api.Git;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -19,11 +19,11 @@ public class TUI {
         while (tuiRunning) {
             screen.showMainMenu();
             int choice = scanner.nextInt();
-            scanner.nextLine(); 
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
-                    startNewTask();
+                    startTask();
                     break;
                 case 2:
                     csv.printCsv();
@@ -43,8 +43,8 @@ public class TUI {
     }
 
     private void deleteRow() {
-        screen.showMessage("choose the index you want to delete? " );
-         csv.printCsv();
+        screen.showMessage("choose the index you want to delete? ");
+        csv.printCsv();
         int deleteIndex = scanner.nextInt();
         scanner.nextLine();
         csv.deleteRow(deleteIndex);
@@ -52,6 +52,15 @@ public class TUI {
         csv.printCsv();
         screen.showMessage("Row deleted.");
     }
+
+    private void saveTask() {
+        screen.showMessage("\nHow focused were you during this task (1-10)?");
+        task.setRating(scanner.nextInt());
+        scanner.nextLine();
+        csv.writeToCsv(task);
+        screen.showMessage("Task saved. Total time: " + time.getTimeSpendFormatted());
+    }
+
 
     private void initializeTaskScreen() {
         screen.clear();
@@ -64,8 +73,62 @@ public class TUI {
         screen.showMessage("Task started. Enjoy!");
     }
 
-    public void startNewTask() {
-        startNewTaskTimer();
+    private void startTaskTimer() {
+        initializeTaskScreen();
+        runTaskTimer();
+
+        System.out.println();
+        saveTask();
+    }
+
+    public void runTaskTimer() {
+        screen.showMessage("Type 's' to stop, 'p' to pause, 'r' to resume the task.");
+        boolean stop = false;
+        boolean paused = false;
+
+        while (!stop) {
+            System.out.print("\rCurrent time spent: " + time.getTimeSpendFormatted() +
+                    " (s = stop, p = pause, r = resume): ");
+            try {
+                if (System.in.available() > 0) {
+                    String input = scanner.nextLine().trim().toLowerCase();
+                    switch (input) {
+                        case "s":
+                            time.stop();
+                            stop = true;
+                            break;
+                        case "p":
+                            if (!paused) {
+                                time.pause();
+                                paused = true;
+                                System.out.println("\nPaused. Type 'r' to resume or 's' to save.");
+                            }
+                            break;
+                        case "r":
+                            if (paused) {
+                                time.resume();
+                                paused = false;
+                            }
+                            break;
+                        default:
+                            System.out.println("\nInvalid input. Use 's', 'p', or 'r'.");
+                    }
+                }
+
+                Thread.sleep(1000);
+
+            } catch (IOException e) {
+                System.out.println("\nError reading input. Stopping task.");
+                stop = true;
+            } catch (InterruptedException e) {
+                System.out.println("\nTimer interrupted. Stopping task.");
+                stop = true;
+            }
+        }
+    }
+
+    public void startTask() {
+        startTaskTimer();
 
         String gitInput = null;
         while (gitInput == null) {
@@ -77,83 +140,65 @@ public class TUI {
                 System.out.println("Invalid input, please type yes, no, or some.");
             }
         }
-
-        if (gitInput.equalsIgnoreCase("y") || gitInput.equalsIgnoreCase("s")) {
-            File repoDir = null;
-            while (repoDir == null) {
-                System.out.println("Enter the path to your Git repository:");
-                String repoInput = scanner.nextLine().trim();
-                File repoPath = new File(repoInput);
-
-                if (!repoPath.exists() || !new File(repoPath, ".git").exists()) {
-                    System.out.println("Invalid Git repository path. Try again.");
-                } else {
-                    try {
-                        repoDir = repoPath;
-                        git.setRepoDir(repoDir);
-                    } catch (IOException e) {
-                        System.out.println("Failed to open Git repository. Skipping Git commit.");
-                        e.printStackTrace();
-                    }
-                }
-            }
+        switch (gitInput.toLowerCase()) {
+            case "y":
+                checkRepoPath();
+                commitAll();
+                break;
+            case "s":
+                checkRepoPath();
+                break;
+            case "n":
+                System.out.println("Skipping Git commit.");
+                break;
 
 
-            if (gitInput.equalsIgnoreCase("y")) {
+        }
+    }
+
+    public void checkRepoPath() {
+        File repoDir = null;
+        while (repoDir == null) {
+            System.out.println("Enter the path to your Git repository:");
+            String repoInput = scanner.nextLine().trim();
+            File repoPath = new File(repoInput);
+
+            if (!repoPath.exists() || !new File(repoPath, ".git").exists()) {
+                System.out.println("Invalid Git repository path. Try again.");
+            } else {
                 try {
-                    git.commitChanges("Completed task: " + task.getTitle());
-                    System.out.println("All changes committed successfully!");
-                } catch (Exception e) {
-                    System.out.println("Failed to commit changes.");
+                    repoDir = repoPath;
+                    git.setRepoDir(repoDir);
+                } catch (IOException e) {
+                    System.out.println("Failed to open Git repository. Skipping Git commit.");
                     e.printStackTrace();
                 }
-            } else if (gitInput.equalsIgnoreCase("s")) {
-                System.out.println("not implemented yet.");
+
+
             }
         }
     }
 
-
-
-    private void startNewTaskTimer() {
-        initializeTaskScreen();
-        screen.showMessage("Type 'save' to stop & save the task.");
-
-        boolean stop = false;
-
-        while (!stop) {
-            System.out.print("\rCurrent time spent: " + time.getTimeSpendFormatted() + " (type 'save' to stop) ");
-
-
+    public void commitAll(){
             try {
-                if (System.in.available() > 0) {
-                    String input = scanner.nextLine();
-                    if (input.equalsIgnoreCase("save")) {
-
-                        time.stop();
-                        stop = true;
-                    }
-                }
-
-                Thread.sleep(1000);
-
+                git.commitChanges("Completed task: " + task.getTitle());
+                System.out.println("All changes committed successfully!");
             } catch (Exception e) {
-                break;
+                System.out.println("Failed to commit changes.");
+                e.printStackTrace();
             }
-        }
 
-        System.out.println();
-        saveTask();
+
     }
 
 
 
-
-    private void saveTask() {
-        screen.showMessage("\nHow focused were you during this task (1-10)?");
-        task.setRating(scanner.nextInt());
-        scanner.nextLine(); 
-        csv.writeToCsv(task);
-        screen.showMessage("Task saved. Total time: " + time.getTimeSpendFormatted());
-    }
 }
+
+
+
+
+
+
+
+

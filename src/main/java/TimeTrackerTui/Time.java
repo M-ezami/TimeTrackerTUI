@@ -2,75 +2,74 @@ package TimeTrackerTui;
 
 import java.time.LocalDateTime;
 import java.time.Duration;
-import java.time.format.DateTimeFormatter;
-
 public class Time {
 
+    private LocalDateTime sessionStart;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Duration timeSpend;
+    private boolean isRunning;
+
 
     public Time() {
-        this.startTime = LocalDateTime.now();
+        this.sessionStart = null;
+        this.startTime = null;
         this.endTime = null;
         this.timeSpend = Duration.ZERO;
+        this.isRunning = false;
     }
 
     public void start() {
-        this.startTime = LocalDateTime.now();
-        this.endTime = null;
-        this.timeSpend = Duration.ZERO;
+        sessionStart = LocalDateTime.now();
+        startTime = sessionStart;
+        endTime = null;
+        timeSpend = Duration.ZERO;
+        isRunning = true;
     }
 
     public void pause() {
-    	
+        if (isRunning) {
+            timeSpend = timeSpend.plus(Duration.between(startTime, LocalDateTime.now()));
+            isRunning = false;
+        }
+    }
+
+    public void resume() {
+        if (!isRunning) {
+            startTime = LocalDateTime.now();
+            isRunning = true;
+        }
     }
 
     public void stop() {
-        this.endTime = LocalDateTime.now();
-        this.timeSpend = Duration.between(startTime, endTime);
+        if (isRunning) {
+            timeSpend = timeSpend.plus(Duration.between(startTime, LocalDateTime.now()));
+            isRunning = false;
+        }
+        endTime = LocalDateTime.now();
     }
+
     public LocalDateTime getStartTime() {
-    	return startTime;
+        return sessionStart;
     }
-    
+
     public LocalDateTime getEndTime() {
-    	return endTime;
+        return endTime;
     }
 
-    public long getHoursSpend() {
-        return getTimeSpend().toHours();
-    }
-
-    public long getMinutesSpend() {
-        return getTimeSpend().toMinutes() % 60;
-    }
-
-    public long getSecondsSpend() {
-        return getTimeSpend().getSeconds() % 60;
-    }
-    
     public Duration getTimeSpend() {
-        if (endTime != null) {
-            return timeSpend;
+        if (isRunning) {
+            return timeSpend.plus(Duration.between(startTime, LocalDateTime.now()));
         } else {
-            return Duration.between(startTime, LocalDateTime.now());
+            return timeSpend;
         }
     }
 
     public String getTimeSpendFormatted() {
-        
-        return String.format("%02d:%02d:%02d", getHoursSpend(), getMinutesSpend(), getSecondsSpend());
+        long hours = getTimeSpend().toHours();
+        long minutes = getTimeSpend().toMinutes() % 60;
+        long seconds = getTimeSpend().getSeconds() % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
-
-    public void printDuration() {
-        System.out.println(getTimeSpendFormatted());
-    }
-
-    public void printStartTime() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        System.out.println("Start time: " + startTime.format(formatter));
-    }
-
-    
 }
+

@@ -5,10 +5,10 @@ private Time time;
 private String title;
 private int focusRating;
 int index ;
+
 public Task(String title, Time time) {
     this.title = title;
     this.time = time;
-    
 }
 
 public void setTitle(String title) {
@@ -32,6 +32,7 @@ public TaskRecord createRecord(int index) {
         this.time.getTimeSpendFormatted(),
         this.focusRating
     );
+
 }
 
 
