@@ -14,7 +14,7 @@ public class taskLogic {
     private final Screen screen = new Screen();
     private final gitHelper git = new gitHelper();
 
-    public void mainLoop() {
+    public void taskLoop() {
         while (tuiRunning) {
             screen.showMainMenu();
             int choice = scanner.nextInt();
