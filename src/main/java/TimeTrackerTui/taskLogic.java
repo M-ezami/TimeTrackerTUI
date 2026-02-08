@@ -5,8 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class TUI {
-
+public class taskLogic {
     private boolean tuiRunning = true;
     private final Scanner scanner = new Scanner(System.in);
     private Task task;
@@ -42,25 +41,39 @@ public class TUI {
         screen.showMessage("Goodbye Master!");
     }
 
-    private void deleteRow() {
-        screen.showMessage("choose the index you want to delete? ");
-        csv.printCsv();
-        int deleteIndex = scanner.nextInt();
-        scanner.nextLine();
-        csv.deleteRow(deleteIndex);
-        screen.showMessage("deleted index: " + deleteIndex);
-        csv.printCsv();
-        screen.showMessage("Row deleted.");
+    public void startTask() {
+        startTaskTimer();
+
+        String gitInput = null;
+        while (gitInput == null) {
+            System.out.println("Is this task part of a Git project and do you want to commit changes, s for some? (y/n/s)");
+            String line = scanner.nextLine().trim();
+            if (line.equalsIgnoreCase("y") || line.equalsIgnoreCase("n") || line.equalsIgnoreCase("s")) {
+                gitInput = line;
+            } else {
+                System.out.println("Invalid input, please type yes, no, or some.");
+            }
+        }
+        switch (gitInput.toLowerCase()) {
+            case "y":
+                checkRepoPath();
+                commitAll();
+                break;
+            case "s":
+                checkRepoPath();
+                break;
+            case "n":
+                System.out.println("Skipping Git commits.");
+                break;
+        }
     }
 
-    private void saveTask() {
-        screen.showMessage("\nHow focused were you during this task (1-10)?");
-        task.setRating(scanner.nextInt());
-        scanner.nextLine();
-        csv.writeToCsv(task);
-        screen.showMessage("Task saved. Total time: " + timer.getTimeSpendFormatted());
+    private void startTaskTimer() {
+        initializeTaskScreen();
+        runTaskTimer();
+        System.out.println();
+        saveTask();
     }
-
 
     private void initializeTaskScreen() {
         screen.clear();
@@ -73,16 +86,8 @@ public class TUI {
         screen.showMessage("Task started. Enjoy!");
     }
 
-    private void startTaskTimer() {
-        initializeTaskScreen();
-        runTaskTimer();
-
-        System.out.println();
-        saveTask();
-    }
-
     public void runTaskTimer() {
-        screen.showMessage("Type 's' to stop, 'p' to pause, 'r' to resume the task.");
+        screen.showMessage("Type 's' to save and stop, 'p' to pause, 'r' to resume the task.");
         boolean stop = false;
         boolean paused = false;
 
@@ -114,9 +119,7 @@ public class TUI {
                             System.out.println("\nInvalid input. Use 's', 'p', or 'r'.");
                     }
                 }
-
                 Thread.sleep(1000);
-
             } catch (IOException e) {
                 System.out.println("\nError reading input. Stopping task.");
                 stop = true;
@@ -127,33 +130,23 @@ public class TUI {
         }
     }
 
-    public void startTask() {
-        startTaskTimer();
+    private void saveTask() {
+        screen.showMessage("\nHow focused were you during this task (1-10)?");
+        task.setRating(scanner.nextInt());
+        scanner.nextLine();
+        csv.writeToCsv(task);
+        screen.showMessage("Task saved. Total time: " + timer.getTimeSpendFormatted());
+    }
 
-        String gitInput = null;
-        while (gitInput == null) {
-            System.out.println("Is this task part of a Git project and do you want to commit changes, s for some? (y/n/s)");
-            String line = scanner.nextLine().trim();
-            if (line.equalsIgnoreCase("y") || line.equalsIgnoreCase("n") || line.equalsIgnoreCase("s")) {
-                gitInput = line;
-            } else {
-                System.out.println("Invalid input, please type yes, no, or some.");
-            }
-        }
-        switch (gitInput.toLowerCase()) {
-            case "y":
-                checkRepoPath();
-                commitAll();
-                break;
-            case "s":
-                checkRepoPath();
-                break;
-            case "n":
-                System.out.println("Skipping Git commits.");
-                break;
-
-
-        }
+    private void deleteRow() {
+        screen.showMessage("choose the index you want to delete? ");
+        csv.printCsv();
+        int deleteIndex = scanner.nextInt();
+        scanner.nextLine();
+        csv.deleteRow(deleteIndex);
+        screen.showMessage("deleted index: " + deleteIndex);
+        csv.printCsv();
+        screen.showMessage("Row deleted.");
     }
 
     public void checkRepoPath() {

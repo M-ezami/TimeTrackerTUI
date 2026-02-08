@@ -1,10 +1,6 @@
 package TimeTrackerTui;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +12,7 @@ import java.util.Map;
 // do sth bout ptt
 
 public class Csv {
-	
+
 	private final File file = new File("/home/mosa/Storage/projects/Timer/src/main/java/resources/tasks.csv");
 
 	public void writeToCsv(Task task) {
@@ -69,7 +65,7 @@ public class Csv {
 	            for (int i = 0; i < fields.length; i++) {
 	            	
 	                String color = columnColors.getOrDefault(i, RESET);
-	                System.out.print(color + fields[i]);
+	                System.out.print(color + fields[i] +"  ");
 	            }
 	            System.out.println(RESET); 
 	        }
