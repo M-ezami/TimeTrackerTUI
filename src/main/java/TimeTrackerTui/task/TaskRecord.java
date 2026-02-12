@@ -1,4 +1,4 @@
-package TimeTrackerTui;
+package TimeTrackerTui.task;
 
 
 import java.time.LocalDateTime;

@@ -8,7 +8,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import java.io.File;
 import java.io.IOException;
 
-public class gitHelper {
+public class GitHelper {
     private Git git;
 
     public void setRepoDir(File file) throws IOException {

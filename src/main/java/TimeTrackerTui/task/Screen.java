@@ -1,4 +1,4 @@
-package TimeTrackerTui;
+package TimeTrackerTui.task;
 
 public class Screen {
 

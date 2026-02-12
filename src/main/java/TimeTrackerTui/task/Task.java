@@ -1,4 +1,4 @@
-package TimeTrackerTui;
+package TimeTrackerTui.task;
 
 public class Task {
 private final Timer timer;

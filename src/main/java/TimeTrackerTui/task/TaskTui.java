@@ -1,18 +1,20 @@
-package TimeTrackerTui;
+package TimeTrackerTui.task;
 
+
+import TimeTrackerTui.GitHelper;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class taskLogic {
+public class TaskTui {
     private boolean tuiRunning = true;
     private final Scanner scanner = new Scanner(System.in);
     private Task task;
     private Timer timer;
-    private final Csv csv = new Csv();
+    private final TaskManager taskManager = new TaskManager();
     private final Screen screen = new Screen();
-    private final gitHelper git = new gitHelper();
+    private final GitHelper git = new GitHelper();
 
     public void taskLoop() {
         while (tuiRunning) {
@@ -25,7 +27,7 @@ public class taskLogic {
                     startTask();
                     break;
                 case 2:
-                    csv.printCsv();
+                    taskManager.printCsv();
                     break;
                 case 3:
                     deleteRow();
@@ -134,18 +136,18 @@ public class taskLogic {
         screen.showMessage("\nHow focused were you during this task (1-10)?");
         task.setRating(scanner.nextInt());
         scanner.nextLine();
-        csv.writeToCsv(task);
+        taskManager.writeToCsv(task);
         screen.showMessage("Task saved. Total time: " + timer.getTimeSpendFormatted());
     }
 
     private void deleteRow() {
         screen.showMessage("choose the index you want to delete? ");
-        csv.printCsv();
+        taskManager.printCsv();
         int deleteIndex = scanner.nextInt();
         scanner.nextLine();
-        csv.deleteRow(deleteIndex);
+        taskManager.deleteRow(deleteIndex);
         screen.showMessage("deleted index: " + deleteIndex);
-        csv.printCsv();
+        taskManager.printCsv();
         screen.showMessage("Row deleted.");
     }
 

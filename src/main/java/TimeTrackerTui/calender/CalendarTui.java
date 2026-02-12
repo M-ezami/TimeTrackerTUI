@@ -1,4 +1,4 @@
-package TimeTrackerTui.Calender;
+package TimeTrackerTui.calender;
 
 import java.time.LocalDateTime;
 import java.util.Scanner;
@@ -6,13 +6,15 @@ import java.util.Scanner;
 public class CalendarTui {
 
     private final Scanner scanner = new Scanner(System.in);
-    calendarManager manager = new calendarManager();
+    CalendarManager manager = new CalendarManager();
+
 
     public void printCalendar() {
         manager.printCalendar();
     }
 
     public void createToDo() {
+        scanner.nextLine();
         System.out.println("title of ur to do?");
         String title = scanner.nextLine();
 
@@ -44,7 +46,7 @@ public class CalendarTui {
     }
 
     public void calendarMenu() {
-        System.out.println("1: show calendar\n 2: add task to calendar");
+        System.out.println("1: show calendar\n2: add task to calendar\n3:sort calander by duedate");
         int choice = scanner.nextInt();
         switch (choice) {
             case 1:
@@ -54,6 +56,7 @@ public class CalendarTui {
                 createToDo();
                 break;
             case 3:
+                manager.sortByDueDateReversed();
                 break;
             default:
                 System.out.println("\nInvalid input. Use 's', 'p', or 'r'.");

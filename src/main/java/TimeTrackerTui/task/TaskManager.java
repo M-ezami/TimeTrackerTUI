@@ -1,4 +1,4 @@
-package TimeTrackerTui;
+package TimeTrackerTui.task;
 
 import java.io.*;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +11,7 @@ import java.util.Map;
 //2.2 use those indices to print the colors.
 // do sth bout ptt
 
-public class Csv {
+public class TaskManager {
 
 	private final File file = new File("/home/mosa/Storage/projects/Timer/src/main/java/resources/tasks.csv");
 

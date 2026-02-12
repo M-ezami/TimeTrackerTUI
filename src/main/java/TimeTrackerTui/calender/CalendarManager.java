@@ -1,15 +1,17 @@
-package TimeTrackerTui.Calender;
+package TimeTrackerTui.calender;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
-public class calendarManager {
-    private final Map<LocalDateTime, ToDoRecord> toDos = new TreeMap<>();
+
+public class CalendarManager {
+
     private final File file = new File("/home/mosa/Storage/projects/Timer/src/main/java/resources/toDoCalender.csv");
-
-    public calendarManager() {
+    private final List<ToDoRecord> toDos = new ArrayList<>();
+    public CalendarManager() {
         if (file.exists()) {
             loadFromCsv();
         }
@@ -32,7 +34,7 @@ public class calendarManager {
                 Status status = Status.valueOf(fields[3]);
                 Priority priority = Priority.valueOf(fields[4]);
                 ToDoRecord record = new ToDoRecord(creationTime, dueBy, title, status, priority);
-                toDos.put(creationTime, record);
+                toDos.add(record);
             }
         } catch (IOException | IllegalArgumentException e) {
             System.out.println("Error loading tasks: " + e.getMessage());
@@ -40,7 +42,7 @@ public class calendarManager {
     }
 
     public void addTask(ToDoRecord toDo) {
-        toDos.put(toDo.creationTime(), toDo);
+        toDos.add(toDo);
         saveToCsv();
     }
 
@@ -50,7 +52,7 @@ public class calendarManager {
 
             fw.write("CreationTime,DueBy,Title,Status,Priority\n");
 
-            for (ToDoRecord task : toDos.values()) {
+            for (ToDoRecord task : toDos) {
                 String line = String.format("%s,%s,%s,%s,%s\n",
                         task.creationTime(),
                         task.dueBy(),
@@ -74,7 +76,7 @@ public class calendarManager {
         String priorityColor = "\033[0;36m";
 
         System.out.println("--- YOUR CALENDAR ---");
-        for (ToDoRecord toDo : toDos.values()){
+        for (ToDoRecord toDo : toDos){
             System.out.print(creationTimeColor + "Created: " + toDo.creationTime() + " | ");
             System.out.print(dueByColor + "Due: " + toDo.dueBy() + " | ");
             System.out.print(titleColor + "Task: " + toDo.title() + " | ");
@@ -83,7 +85,22 @@ public class calendarManager {
         }
     }
 
-        }
+    public void sortByDueDate(){
+        toDos.sort(ToDoRecord.BY_DUE_DATE);
+        printCalendar();
+    }
+    public void sortByDueDateReversed(){
+        toDos.sort(ToDoRecord.BY_DUE_DATE_REV);
+        printCalendar();
+    }
+
+    public void sortByPriority(){
+        toDos.sort(Comparator.comparing(ToDoRecord::priority));
+    }
+
+    }
+
+
 
 
 
