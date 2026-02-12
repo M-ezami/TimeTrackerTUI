@@ -1,11 +1,15 @@
 package TimeTrackerTui;
 
 import TimeTrackerTui.calender.CalendarManager;
+import TimeTrackerTui.calender.Priority;
+import TimeTrackerTui.calender.Status;
+import TimeTrackerTui.calender.ToDoRecord;
 import TimeTrackerTui.task.TaskManager;
 import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class AppController {
 
@@ -25,8 +29,10 @@ public class AppController {
         gui.addWindowAndWait(mainMenu);
     }
 
-    public void createToDo(){
-
+    public void createToDo(String title, Status status, Priority priority,){
+        LocalDateTime creationTime = LocalDateTime.now();
+        ToDoRecord toDo = new ToDoRecord(creationTime, dT, title, status, p);
+        manager.addTask(toDo);
 
     }
 
