@@ -6,7 +6,7 @@ import com.googlecode.lanterna.gui2.*;
 
 public class CreateToDoWindow extends BasicWindow {
 
-    public CreateToDoWindow(MultiWindowTextGUI gui, CalendarController calendarController) {
+    public CreateToDoWindow(WindowManager windowManager, CalendarController calendarController) {
         super("Create ToDo");
 
         Panel panel = new Panel(new LinearLayout(Direction.VERTICAL));
@@ -35,10 +35,8 @@ public class CreateToDoWindow extends BasicWindow {
             String priorityStr = priorityBox.getText().toUpperCase();
 
             calendarController.createToDo(title, Priority.valueOf(priorityStr), day, time);
-
-            CalendarWindow calendarWindow = new CalendarWindow(gui, calendarController);
-            gui.addWindowAndWait(calendarWindow);
             this.close();
+            windowManager.calanderMenu();
         }));
 
         setComponent(panel);

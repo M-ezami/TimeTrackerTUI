@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CalendarWindow extends BasicWindow {
 
-    public CalendarWindow(MultiWindowTextGUI gui, CalendarController calendarController) {
+    public CalendarWindow(WindowManager gui, CalendarController calendarController) {
         super("Calendar");
 
         Panel panel = new Panel(new LinearLayout(Direction.VERTICAL));
