@@ -11,22 +11,28 @@ public class WindowManager {
     private final MultiWindowTextGUI gui;
     private final CalendarController calendarController;
     private final LinkedList<BasicWindow> history = new LinkedList<>();
+    private BasicWindow currentWindow;
 
     public WindowManager(MultiWindowTextGUI gui, CalendarController calendarController) {
         this.gui = gui;
         this.calendarController = calendarController;
     }
     public void openWindow(BasicWindow window){
+        currentWindow = window;
         history.add(window);
         gui.addWindowAndWait(window);
     }
 
-    public void back(BasicWindow window) {
-        if (!history.isEmpty()) {
+    public BasicWindow back() {
+        if (history.size()>1) {
             history.removeLast();
-            history.getLast();
+            currentWindow = history.getLast();
+           return currentWindow;
         }
+        return null;
     }
+
+
 
     public void stopApp() throws IOException {
         gui.getScreen().stopScreen();

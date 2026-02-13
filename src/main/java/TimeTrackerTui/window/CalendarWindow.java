@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CalendarWindow extends BasicWindow {
 
-    public CalendarWindow(WindowManager gui, CalendarController calendarController) {
+    public CalendarWindow(WindowManager windowManager, CalendarController calendarController) {
         super("Calendar");
 
         Panel panel = new Panel(new LinearLayout(Direction.VERTICAL));
@@ -28,7 +28,10 @@ public class CalendarWindow extends BasicWindow {
         }
 
         panel.addComponent(table);
-        panel.addComponent(new Button("Back", this::close));
+        panel.addComponent(new Button("Back", () -> {
+            this.close();
+            windowManager.openWindow(windowManager.back());
+        }));
 
         setComponent(panel);
     }

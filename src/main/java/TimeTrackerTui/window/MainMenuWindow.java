@@ -2,7 +2,6 @@ package TimeTrackerTui.window;
 
 import TimeTrackerTui.Controller.CalendarController;
 import com.googlecode.lanterna.gui2.*;
-
 import java.io.IOException;
 
 public class MainMenuWindow extends BasicWindow {
