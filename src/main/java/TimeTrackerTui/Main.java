@@ -1,7 +1,7 @@
 package TimeTrackerTui;
 
 
-import TimeTrackerTui.AppController;
+import TimeTrackerTui.Controller.AppController;
 
 import java.io.IOException;
 
